@@ -13,8 +13,6 @@ jobs:
       - name: Fix permissions before checkout
         run: sudo chown -R $USER:$USER $GITHUB_WORKSPACE
 
-      - name: Force delete previous build artifacts
-        run: sudo rm -rf $GITHUB_WORKSPACE/* || true
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -64,12 +62,18 @@ jobs:
           docker pull ghcr.io/techsoft3d/streaming-server:staging
           docker pull ghcr.io/techsoft3d/node-server:staging
       
+      - name: 🔍 Debug public-staging existence
+        run: |
+          echo "Working directory: $(pwd)"
+          ls -la
+          ls -la public-staging
+
       - name: Copy `./public-staging` into External Docker Volume (Using Temporary Container)
         run: |
           docker run --rm \
             -v public-staging:/volume \
             -v $(pwd)/public-staging:/backup \
-            alpine sh -c "cp -r /backup/* /volume/ && ls -la /volume/"
+            alpine sh -c "ls /backup && cp -r /backup/* /volume/ || echo 'Nothing to copy'"
 
       - name: Build and Run Docker Containers
         run: |
@@ -83,9 +87,6 @@ jobs:
       - name: Fix permissions before checkout
         run: sudo chown -R $USER:$USER $GITHUB_WORKSPACE
 
-      - name: Force delete previous build artifacts
-        run: sudo rm -rf $GITHUB_WORKSPACE/* || true
-
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -134,12 +135,18 @@ jobs:
           docker pull ghcr.io/techsoft3d/streaming-server:staging
           docker pull ghcr.io/techsoft3d/node-server:staging
       
+      - name: 🔍 Debug public-staging existence
+        run: |
+          echo "Working directory: $(pwd)"
+          ls -la
+          ls -la public-staging
+
       - name: Copy `./public-staging` into External Docker Volume (Using Temporary Container)
         run: |
           docker run --rm \
             -v public-staging:/volume \
             -v $(pwd)/public-staging:/backup \
-            alpine sh -c "cp -r /backup/* /volume/ && ls -la /volume/"
+            alpine sh -c "ls /backup && cp -r /backup/* /volume/ || echo 'Nothing to copy'"
 
       - name: Build and Run Docker Containers
         run: |
