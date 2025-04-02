@@ -3,7 +3,7 @@
 
 <head>
     <title>
-        Engine Scan | HOOPS Web Viewer
+        Staging Engine Scan | HOOPS Web Viewer
     </title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="chrome=1;IE=edge" />
@@ -96,7 +96,7 @@
             var viewer;
 
 
-            var server = new ServerConnection("https://engine-scan-docker.techsoft3d.com"); //change to IP of host server
+            var server = new ServerConnection("https://engine-scan-docker-staging.techsoft3d.com"); //change to IP of host server
 
             await server.connect();
             viewer = new Communicator.WebViewer({
