@@ -56,8 +56,11 @@ jobs:
       - name: Login to GitHub Packages
         run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Remove unused Docker images
-        run: docker image prune -af  
+      - name: Stop running containers
+        run: docker-compose -p main_project down --remove-orphans || true
+
+      - name: Remove unused Docker images and build cache
+        run: docker system prune -af
         
       - name: Pull Latest Docker Images
         run: |
@@ -71,7 +74,7 @@ jobs:
             -v public:/volume \
             -v $(pwd)/public:/backup \
             alpine sh -c "cp -r /backup/* /volume/ && ls -la /volume/"
-  
+   
           docker run --rm \
             -v patches:/volume \
             -v $(pwd)/patches:/backup \
@@ -138,8 +141,11 @@ jobs:
       - name: Login to GitHub Packages
         run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Remove unused Docker images
-        run: docker image prune -af  
+      - name: Stop running containers
+        run: docker-compose -p main_project down --remove-orphans || true
+
+      - name: Remove unused Docker images and build cache
+        run: docker system prune -af
         
       - name: Pull Latest Docker Images
         run: |
@@ -153,7 +159,7 @@ jobs:
             -v public:/volume \
             -v $(pwd)/public:/backup \
             alpine sh -c "cp -r /backup/* /volume/ && ls -la /volume/"
-  
+   
           docker run --rm \
             -v patches:/volume \
             -v $(pwd)/patches:/backup \
